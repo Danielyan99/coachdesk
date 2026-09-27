@@ -39,6 +39,10 @@ export async function createTestApp(overrides: Partial<AppConfig> = {}): Promise
   const app = moduleRef.createNestApplication();
   configureApp(app, config);
   await app.init();
+  // Mongoose builds indexes in the background. On a fresh database, wait for them, or a test can
+  // beat the unique email index and see a duplicate signup succeed.
+  const connection = app.get<Connection>(getConnectionToken());
+  await Promise.all(Object.values(connection.models).map((model) => model.init()));
 
   return {
     app,

@@ -12,6 +12,7 @@ import { ClientsModule } from './clients/clients.module';
 import { APP_CONFIG, type AppConfig } from './config/configuration';
 import { HealthController } from './health.controller';
 import { PlansModule } from './plans/plans.module';
+import { ProgressModule } from './progress/progress.module';
 import { TemplatesModule } from './templates/templates.module';
 import { UsersModule } from './users/users.module';
 
@@ -56,6 +57,7 @@ export class AppModule {
         ClientsModule,
         PlansModule,
         TemplatesModule,
+        ProgressModule,
       ],
       controllers: [HealthController],
       providers: [

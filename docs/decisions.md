@@ -112,3 +112,39 @@ meals. It is stored as embedded sub-documents inside the plan, not in separate c
 saves a whole week at once, so embedding means one read and one write. The zod `weekSchema` checks exactly 7 days
 and that every exercise and meal **id is unique** in the week, because a check-off points to one item id.
 The browser creates these ids (`crypto.randomUUID`), so the editor can add items before anything is saved.
+
+## 16. "Today" is computed on the server, in the client's time zone
+
+Each client stores an IANA time zone (`Asia/Yerevan`). The server turns "now" into that client's calendar date with
+`Intl.DateTimeFormat` and works with plain `YYYY-MM-DD` strings from there. A plan day is a calendar day, not a
+24-hour UTC slice: at 02:00 on Monday in Yerevan it is still Sunday in UTC, and the client must see Monday's workout.
+The browser's clock is not trusted for this (it can be wrong, and the trainer's dashboard needs the same answer).
+Unit tests cover UTC+4, UTC-7, a half-hour zone, UTC+14 and the October daylight-saving switch.
+
+## 17. The "on track" rule
+
+Adherence = done items / scheduled items over the **last 7 days, including today**, only counting days from the plan's
+start date. At least 80% is on track (green), at least 50% at risk (amber), below 50% behind (red).
+Two details make it fair:
+
+- **Today only counts in the client's favour.** Past days count all their scheduled items; today counts only the
+  items already done. Otherwise every client would look "behind" at 9 am.
+- **"Just started"** (grey) when nothing is scheduled in the window yet (plan starts today, or only rest days), and
+  **"No plan"** when there is no plan. A new client should not show up red.
+  It is one pure function (`computeAdherence`) with unit tests for every threshold and edge case.
+
+## 18. Check-offs: idempotent PUT and DELETE
+
+`PUT /me/checkins/:date/:itemId` checks an item, `DELETE` unchecks it. A unique index on (client, date, item) plus an
+upsert makes a double tap or a retry after a timeout harmless: the result is always one check-in. That matters for
+the optimistic UI on a phone with a bad connection. Only **today and yesterday** can be changed ("I did it last night
+but forgot to tick it"); older history is fixed so the trainer can trust it. The item must really be on the plan
+for that weekday.
+
+## 19. The dashboard is one request with three queries
+
+`GET /dashboard` returns every client with status, plan name and last activity. It runs a fixed number of queries
+(clients, their active plans, recent check-ins, plus one aggregation for the last activity) and joins them in memory,
+instead of one query per client (the "N+1" problem). With 30 clients that is 4 queries, not 90.
+Clients can be in different time zones, so it fetches one extra day of check-ins and lets `computeAdherence` pick
+each client's own 7-day window.
