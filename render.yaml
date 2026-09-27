@@ -17,6 +17,6 @@ services:
       # Long random string used to sign login tokens
       - key: JWT_SECRET
         generateValue: true
-      # The Vercel URL of the web app, e.g. https://coachdesk.vercel.app (used for invite links)
+      # The Vercel URL of the web app (used for invite links; https also turns on secure cookies)
       - key: WEB_ORIGIN
-        sync: false
+        value: https://coachdesk-lyart.vercel.app
