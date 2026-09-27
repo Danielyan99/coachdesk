@@ -147,7 +147,7 @@ function ClientList({ clients }: { clients: DashboardClientDto[] }) {
               <p className="truncate text-sm text-ink-muted">{c.goals || 'No goals written yet'}</p>
             </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-muted sm:justify-end">
-              <span className="sm:w-40 sm:truncate">{c.planName ?? 'No plan'}</span>
+              <span className="sm:w-56 sm:truncate">{c.planName ?? 'No plan'}</span>
               <span className="sm:w-36">
                 {c.lastActivity ? `Active ${timeAgo(c.lastActivity)}` : <LoginState c={c} />}
               </span>

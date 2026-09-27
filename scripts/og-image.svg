@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      text { font-family: Inter, 'Segoe UI', Arial, sans-serif; }
+      .h { font-size: 60px; font-weight: 700; fill: #17201b; letter-spacing: -1.5px; }
+      .sub { font-size: 26px; fill: #5b675f; }
+      .name { font-size: 22px; font-weight: 600; fill: #17201b; }
+      .plan { font-size: 17px; fill: #5b675f; }
+      .chip { font-size: 17px; font-weight: 600; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="#f6f7f4"/>
+
+  <!-- Logo -->
+  <rect x="72" y="64" width="48" height="48" rx="12" fill="#1f7a4d"/>
+  <path d="M85 89l7 7 15-15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="136" y="99" font-size="30" font-weight="700" fill="#17201b">Coachdesk</text>
+
+  <!-- Headline -->
+  <text x="72" y="228" class="h">Know which clients</text>
+  <text x="72" y="300" class="h">are on track.</text>
+  <text x="72" y="364" class="sub">Weekly workout and meal plans, a daily</text>
+  <text x="72" y="400" class="sub">checklist for clients, and one dashboard</text>
+  <text x="72" y="436" class="sub">that shows who needs you.</text>
+  <text x="72" y="560" font-size="20" font-weight="600" fill="#1f7a4d">React · NestJS · MongoDB · TypeScript</text>
+
+  <!-- Dashboard card -->
+  <rect x="690" y="120" width="440" height="400" rx="24" fill="#ffffff" stroke="#e3e6df" stroke-width="2"/>
+  <text x="722" y="170" font-size="24" font-weight="700" fill="#17201b">Clients</text>
+  <text x="1098" y="170" font-size="16" fill="#5b675f" text-anchor="end">8 of 30 · Pro</text>
+
+  <g>
+    <rect x="714" y="196" width="392" height="68" rx="14" fill="#fff" stroke="#e3e6df" stroke-width="2"/>
+    <text x="734" y="225" class="name">Lena Müller</text>
+    <text x="734" y="249" class="plan">Busy schedule</text>
+    <rect x="968" y="215" width="118" height="30" rx="15" fill="#c2413b" fill-opacity="0.12"/>
+    <circle cx="986" cy="230" r="5" fill="#c2413b"/>
+    <text x="998" y="236" class="chip" fill="#c2413b">Behind</text>
+  </g>
+  <g>
+    <rect x="714" y="276" width="392" height="68" rx="14" fill="#fff" stroke="#e3e6df" stroke-width="2"/>
+    <text x="734" y="305" class="name">Sofia Rossi</text>
+    <text x="734" y="329" class="plan">Fat loss (knee-friendly)</text>
+    <rect x="968" y="295" width="118" height="30" rx="15" fill="#b7791f" fill-opacity="0.14"/>
+    <circle cx="986" cy="310" r="5" fill="#b7791f"/>
+    <text x="998" y="316" class="chip" fill="#b7791f">At risk</text>
+  </g>
+  <g>
+    <rect x="714" y="356" width="392" height="68" rx="14" fill="#fff" stroke="#e3e6df" stroke-width="2"/>
+    <text x="734" y="385" class="name">Ana Petrosyan</text>
+    <text x="734" y="409" class="plan">Beginner strength</text>
+    <rect x="952" y="375" width="134" height="30" rx="15" fill="#1f8a4c" fill-opacity="0.12"/>
+    <circle cx="970" cy="390" r="5" fill="#1f8a4c"/>
+    <text x="982" y="396" class="chip" fill="#1f8a4c">On track</text>
+  </g>
+  <g>
+    <rect x="714" y="436" width="392" height="68" rx="14" fill="#fff" stroke="#e3e6df" stroke-width="2"/>
+    <text x="734" y="465" class="name">Mark Chen</text>
+    <text x="734" y="489" class="plan">Fat loss: strength + cardio</text>
+    <rect x="952" y="455" width="134" height="30" rx="15" fill="#1f8a4c" fill-opacity="0.12"/>
+    <circle cx="970" cy="470" r="5" fill="#1f8a4c"/>
+    <text x="982" y="476" class="chip" fill="#1f8a4c">On track</text>
+  </g>
+</svg>

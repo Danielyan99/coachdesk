@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import { App } from './App';
 import { ApiError } from './lib/api';
+import { wakeServer } from './lib/serverStatus';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -15,6 +16,9 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Ping the API right away: on the free host it may need half a minute to wake up.
+void wakeServer();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

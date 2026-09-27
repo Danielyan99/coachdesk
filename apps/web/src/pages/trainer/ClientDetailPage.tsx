@@ -114,13 +114,13 @@ export function AdherenceBars({ data }: { data: AdherenceDto }) {
     <>
       <ol className="grid grid-cols-7 gap-2" aria-label="Done items per day">
         {data.days.map((d) => {
-          const ratio = d.scheduled ? d.done / d.scheduled : 0;
+          const ratio = d.planned ? d.done / d.planned : 0;
           const label = d.beforeStart
             ? 'before the plan started'
             : d.isToday
-              ? `${d.done} done so far`
-              : d.scheduled
-                ? `${d.done} of ${d.scheduled} done`
+              ? `${d.done} of ${d.planned} done so far`
+              : d.planned
+                ? `${d.done} of ${d.planned} done`
                 : 'rest day';
           return (
             <li key={d.date} className="flex flex-col items-center gap-1.5">
@@ -132,11 +132,18 @@ export function AdherenceBars({ data }: { data: AdherenceDto }) {
                 )}
                 title={`${shortDate(d.date)}: ${label}`}
               >
-                {!d.beforeStart && d.scheduled > 0 && (
+                {!d.beforeStart && d.planned > 0 && (
                   <div
                     className={cx(
                       'w-full rounded-lg',
-                      ratio >= 0.8 ? 'bg-on-track' : ratio >= 0.5 ? 'bg-at-risk' : 'bg-behind',
+                      // Today is still in progress: neutral colour, not a verdict.
+                      d.isToday
+                        ? 'bg-accent/60'
+                        : ratio >= 0.8
+                          ? 'bg-on-track'
+                          : ratio >= 0.5
+                            ? 'bg-at-risk'
+                            : 'bg-behind',
                     )}
                     style={{ height: `${Math.max(ratio * 100, 4)}%` }}
                   />

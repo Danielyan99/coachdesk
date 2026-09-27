@@ -50,7 +50,14 @@ describe('computeAdherence', () => {
     // Past 6 days: 12 scheduled. All done, nothing yet today.
     const result = computeAdherence({ plan, checkIns: doneOn(WEEK.slice(0, 6)), today: TODAY });
     expect(result).toMatchObject({ status: 'on-track', done: 12, scheduled: 12, ratio: 1 });
-    expect(result.days[6]).toEqual({ date: TODAY, scheduled: 0, done: 0, beforeStart: false, isToday: true });
+    expect(result.days[6]).toEqual({
+      date: TODAY,
+      scheduled: 0,
+      planned: 2,
+      done: 0,
+      beforeStart: false,
+      isToday: true,
+    });
   });
 
   it('today helps once done', () => {

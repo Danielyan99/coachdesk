@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 
 export function Logo({ to = '/' }: { to?: string }) {
   return (
-    <Link to={to} className="flex items-center gap-2 rounded-lg font-semibold tracking-tight text-ink">
+    <Link to={to} className="flex min-h-11 items-center gap-2 rounded-lg font-semibold tracking-tight text-ink">
       <svg viewBox="0 0 32 32" className="size-7" aria-hidden>
         <rect width="32" height="32" rx="8" fill="var(--color-accent)" />
         <path

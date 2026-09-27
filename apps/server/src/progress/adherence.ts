@@ -44,13 +44,13 @@ export function computeAdherence({ plan, checkIns, today }: AdherenceInput): Adh
   const days: AdherenceDayDto[] = window.map((date) => {
     const isToday = date === today;
     const beforeStart = !plan || date < plan.startDate;
-    if (beforeStart) return { date, scheduled: 0, done: 0, beforeStart: true, isToday };
+    if (beforeStart) return { date, scheduled: 0, planned: 0, done: 0, beforeStart: true, isToday };
 
     const items = itemIdsOf(plan.days[weekdayOf(date)]);
     const doneSet = doneByDate.get(date);
     // Only check-offs of items that are really on the plan that day count (not stale ids from an edited plan).
     const done = doneSet ? items.filter((id) => doneSet.has(id)).length : 0;
-    return { date, scheduled: isToday ? done : items.length, done, beforeStart: false, isToday };
+    return { date, scheduled: isToday ? done : items.length, planned: items.length, done, beforeStart: false, isToday };
   });
 
   const scheduled = days.reduce((sum, d) => sum + d.scheduled, 0);

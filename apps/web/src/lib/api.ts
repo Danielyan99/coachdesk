@@ -1,3 +1,5 @@
+import { markServerReady } from './serverStatus';
+
 /** An error response from the API, with the server's message and (for 400s) messages per form field. */
 export class ApiError extends Error {
   constructor(
@@ -30,6 +32,8 @@ export async function api<T>(path: string, options: { method?: Method; body?: un
     throw new ApiError(0, 'Could not reach the server. Check your connection and try again.');
   }
 
+  // Any answer from the app itself (not a 502/504 from the proxy while it boots) means the server is up.
+  if (res.status < 500) markServerReady();
   if (res.status === 204) return undefined as T;
   const data = await res.json().catch(() => undefined);
   if (!res.ok) {

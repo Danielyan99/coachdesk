@@ -1,9 +1,11 @@
 import type { AuthUser, Role } from '@coachdesk/shared';
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router';
 import { useMe } from '../lib/queries';
+import { useServerStatus } from '../lib/serverStatus';
 import { ErrorState } from './ui';
 import { FullPageLoader } from './FullPageLoader';
+import { WakeUpScreen } from './WakeUp';
 
 export function homeFor(user: AuthUser): string {
   return user.role === 'trainer' ? '/app' : '/me';
@@ -13,7 +15,15 @@ export function homeFor(user: AuthUser): string {
 export function RequireRole({ role, children }: { role: Role; children: ReactNode }) {
   const me = useMe();
   const location = useLocation();
+  const server = useServerStatus();
+  const { isError, refetch } = me;
 
+  // The first request may have failed while the server was asleep: ask again once it is up.
+  useEffect(() => {
+    if (server === 'ready' && isError) void refetch();
+  }, [server, isError, refetch]);
+
+  if ((me.isPending || me.isError) && (server === 'waking' || server === 'down')) return <WakeUpScreen />;
   if (me.isPending) return <FullPageLoader />;
   if (me.isError) {
     return (

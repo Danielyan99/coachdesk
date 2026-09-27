@@ -1,6 +1,7 @@
 import type { AdherenceStatus } from '@coachdesk/shared';
 import { DemoButtons } from '../components/DemoButtons';
 import { PublicFooter, PublicHeader } from '../components/PublicHeader';
+import { WakeUpBanner } from '../components/WakeUp';
 import { StatusChip } from '../components/ui';
 
 export function LandingPage() {
@@ -58,6 +59,7 @@ export function LandingPage() {
         </section>
       </main>
       <PublicFooter />
+      <WakeUpBanner />
     </div>
   );
 }
@@ -81,8 +83,8 @@ const PREVIEW_ROWS: { name: string; plan: string; status: AdherenceStatus; pct?:
 /** A small, static picture of the two sides of the app, drawn with the real components. */
 function ProductPreview() {
   return (
-    <div aria-hidden className="relative">
-      <div className="card p-4 shadow-sm sm:p-5">
+    <div aria-hidden className="relative sm:pb-36">
+      <div className="card p-4 shadow-sm sm:p-5 sm:pb-10">
         <div className="flex items-baseline justify-between">
           <p className="font-semibold">Clients</p>
           <p className="text-xs text-ink-muted">8 of 30 clients · Pro plan</p>
@@ -99,7 +101,7 @@ function ProductPreview() {
           ))}
         </ul>
       </div>
-      <div className="card absolute -bottom-10 -left-4 hidden w-56 p-4 shadow-lg sm:block lg:-left-10">
+      <div className="card absolute bottom-0 left-8 hidden w-56 p-4 shadow-lg sm:block">
         <p className="text-xs text-ink-muted">Today · Ana</p>
         <p className="mt-1 text-sm font-semibold">3 of 6 done</p>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/[0.08]">

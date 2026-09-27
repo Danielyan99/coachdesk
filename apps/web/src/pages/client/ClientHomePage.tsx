@@ -1,6 +1,7 @@
 import { NavLink, Route, Routes, useNavigate } from 'react-router';
 import { DemoBanner } from '../../components/DemoBanner';
 import { Logo } from '../../components/Logo';
+import { SkipLink } from '../../components/SkipLink';
 import { Button, cx } from '../../components/ui';
 import { useLogout, useMe } from '../../lib/queries';
 import { TodayPage } from './TodayPage';
@@ -20,6 +21,7 @@ export function ClientHomePage() {
 
   return (
     <div className="min-h-dvh pb-20">
+      <SkipLink />
       {me?.demo && <DemoBanner role="client" />}
       <header className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
         <Logo to="/me" />
@@ -37,7 +39,7 @@ export function ClientHomePage() {
         </Button>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 pb-6">
+      <main id="main" tabIndex={-1} className="mx-auto max-w-lg px-4 pb-6 outline-none">
         <Routes>
           <Route index element={<TodayPage />} />
           <Route path="week" element={<WeekPage />} />

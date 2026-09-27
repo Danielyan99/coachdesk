@@ -19,7 +19,10 @@ export const ADHERENCE_LABELS: Record<AdherenceStatus, string> = {
 
 export interface AdherenceDayDto {
   date: string;
+  /** Items that count toward the score (for today: only the ones already done). */
   scheduled: number;
+  /** Items on the plan that day, for display ("2 of 5 done so far"). */
+  planned: number;
   done: number;
   /** The plan had not started yet on this day (not counted). */
   beforeStart: boolean;

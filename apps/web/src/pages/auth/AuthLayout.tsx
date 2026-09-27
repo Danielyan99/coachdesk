@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Logo } from '../../components/Logo';
+import { WakeUpBanner } from '../../components/WakeUp';
 
 export function AuthLayout({
   title,
@@ -20,6 +21,7 @@ export function AuthLayout({
         {subtitle && <p className="mt-1.5 text-sm text-ink-muted">{subtitle}</p>}
         <div className="mt-6">{children}</div>
       </div>
+      <WakeUpBanner />
     </main>
   );
 }

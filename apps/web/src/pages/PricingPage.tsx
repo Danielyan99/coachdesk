@@ -2,6 +2,7 @@ import { type Tier, TIER_IDS, TIERS } from '@coachdesk/shared';
 import { Link } from 'react-router';
 import { DemoButtons } from '../components/DemoButtons';
 import { PublicFooter, PublicHeader } from '../components/PublicHeader';
+import { WakeUpBanner } from '../components/WakeUp';
 import { Button, cx, FormError } from '../components/ui';
 import { useMe, useSwitchTier } from '../lib/queries';
 
@@ -61,6 +62,7 @@ export function PricingPage() {
         </div>
       </main>
       <PublicFooter />
+      <WakeUpBanner />
     </div>
   );
 }

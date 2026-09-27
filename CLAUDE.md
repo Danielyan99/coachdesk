@@ -15,7 +15,8 @@ Portfolio project. Keep it small, clean and finished. The full plan is in `docs/
 
 - `npm run dev` — server (:3000) and web (:5173). Vite proxies `/api` to the server.
 - `npm test`, `npm run build`, `npm run format`
-- Local Mongo: `docker compose up -d`, then copy `apps/server/.env.example` to `apps/server/.env`.
+- Local Mongo without Docker: `npm run db:dev` (port 27017). Copy `apps/server/.env.example` to `apps/server/.env`.
+- `npm run seed` (local logins), `npm run screenshots` (README images; app must be running), `npm run og-image`.
 
 ## Rules
 

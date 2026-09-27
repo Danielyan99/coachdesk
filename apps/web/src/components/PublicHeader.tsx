@@ -7,7 +7,7 @@ import { buttonClass } from './ui';
 export function PublicHeader() {
   const { data: me } = useMe();
   return (
-    <header className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-4 sm:px-6">
+    <header className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 sm:px-6">
       <Logo />
       <nav aria-label="Main" className="ml-auto flex items-center gap-1 sm:gap-2">
         <Link to="/pricing" className={buttonClass('ghost', 'sm')}>

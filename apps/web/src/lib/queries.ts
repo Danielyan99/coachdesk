@@ -18,6 +18,7 @@ import type {
 } from '@coachdesk/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, ApiError } from './api';
+import { whenServerReady } from './serverStatus';
 
 export const keys = {
   me: ['me'] as const,
@@ -86,7 +87,11 @@ export function useAcceptInvite(token: string) {
 export function useStartDemo() {
   const setSession = useSetSession();
   return useMutation({
-    mutationFn: (role: 'trainer' | 'client') => api<AuthUser>('/auth/demo', { method: 'POST', body: { role } }),
+    // Wait for a sleeping server to wake up first, so the request doesn't time out at the proxy.
+    mutationFn: async (role: 'trainer' | 'client') => {
+      await whenServerReady();
+      return api<AuthUser>('/auth/demo', { method: 'POST', body: { role } });
+    },
     onSuccess: setSession,
   });
 }
