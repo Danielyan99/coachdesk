@@ -89,3 +89,26 @@ the web app can show "Switch plan" instead of a generic error. Two requests at t
 pass; a strict check would need a transaction or a counter document, which is too much for a demo of pricing.
 Switching plans is instant and free. Switching down is refused while the trainer has more active clients than the
 smaller plan allows.
+
+## 13. Assigning a template makes a copy (snapshot)
+
+`POST /templates/:id/assign` copies the template's 7 days into a new `ClientPlan` document for that client.
+The trainer can then adjust one client's plan (swap squats for lunges because of a knee injury) without touching
+the template or the other clients who got the same template. Editing or deleting the template later also leaves
+existing plans alone. The alternative, plans that point to a shared template, would change every client's week
+the moment the trainer edits the template, which is surprising and can't be undone.
+Cost: some duplicated data. A week plan is a few KB, so this is fine.
+
+## 14. One active plan per client, old plans kept
+
+A **partial unique index** (`clientId` unique where `active: true`) lets MongoDB itself guarantee at most one active
+plan per client. Assigning a new plan sets the old one to `active: false` instead of deleting it, so past check-ins
+still point to a real plan (adherence history stays correct).
+
+## 15. Plan shape: Mongoose sub-schemas + zod
+
+A week is an array of 7 days (index 0 = Monday); each day has an optional workout (list of exercises) and a list of
+meals. It is stored as embedded sub-documents inside the plan, not in separate collections: the app always loads and
+saves a whole week at once, so embedding means one read and one write. The zod `weekSchema` checks exactly 7 days
+and that every exercise and meal **id is unique** in the week, because a check-off points to one item id.
+The browser creates these ids (`crypto.randomUUID`), so the editor can add items before anything is saved.

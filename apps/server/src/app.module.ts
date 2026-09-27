@@ -11,6 +11,8 @@ import { SESSION_TTL_MS } from './auth/session-cookie';
 import { ClientsModule } from './clients/clients.module';
 import { APP_CONFIG, type AppConfig } from './config/configuration';
 import { HealthController } from './health.controller';
+import { PlansModule } from './plans/plans.module';
+import { TemplatesModule } from './templates/templates.module';
 import { UsersModule } from './users/users.module';
 
 /** Makes APP_CONFIG injectable in every module. */
@@ -52,6 +54,8 @@ export class AppModule {
         UsersModule,
         AuthModule,
         ClientsModule,
+        PlansModule,
+        TemplatesModule,
       ],
       controllers: [HealthController],
       providers: [

@@ -37,7 +37,7 @@ export const createClientSchema = z.object({
   notes: z.string().trim().max(2000).default(''),
   timezone: timeZoneSchema,
 });
-export type CreateClientInput = z.input<typeof createClientSchema>;
+export type CreateClientInput = z.infer<typeof createClientSchema>;
 
 export const updateClientSchema = z
   .object({
