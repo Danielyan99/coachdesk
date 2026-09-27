@@ -44,7 +44,11 @@ export function TrainerLayout() {
               variant="secondary"
               size="sm"
               loading={logout.isPending}
-              onClick={() => logout.mutate(undefined, { onSettled: () => navigate('/', { replace: true }) })}
+              onClick={() => {
+                // Leave the protected page first; clearing the session there would redirect to /login instead.
+                navigate('/', { replace: true });
+                logout.mutate();
+              }}
             >
               Log out
             </Button>

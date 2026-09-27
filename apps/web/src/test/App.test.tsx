@@ -55,7 +55,7 @@ describe('App routing', () => {
       }),
     });
     renderApp('/app');
-    expect(await screen.findByText(/plan/i)).toBeInTheDocument();
+    expect(await screen.findByText('Your plan is on its way')).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Clients' })).not.toBeInTheDocument();
   });
 
