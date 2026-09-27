@@ -33,7 +33,12 @@ export async function api<T>(path: string, options: { method?: Method; body?: un
   if (res.status === 204) return undefined as T;
   const data = await res.json().catch(() => undefined);
   if (!res.ok) {
-    const message = typeof data?.message === 'string' ? data.message : 'Something went wrong. Please try again.';
+    const message =
+      res.status === 429
+        ? 'Too many tries in a short time. Please wait a minute and try again.'
+        : typeof data?.message === 'string'
+          ? data.message
+          : 'Something went wrong. Please try again.';
     throw new ApiError(res.status, message, data?.fieldErrors ?? {}, data?.code);
   }
   return data as T;

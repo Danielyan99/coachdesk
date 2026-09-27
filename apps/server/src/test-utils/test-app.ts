@@ -32,6 +32,7 @@ export async function createTestApp(overrides: Partial<AppConfig> = {}): Promise
     trustProxyHops: 0,
     rateLimitPerMinute: 1000,
     authRateLimitPerMinute: 1000,
+    demoRateLimitPerHour: 1000,
     ...overrides,
   };
 

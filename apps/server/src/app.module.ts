@@ -5,10 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
-import { AUTH_RATE_LIMIT } from './auth/decorators';
+import { AUTH_RATE_LIMIT, DEMO_RATE_LIMIT } from './auth/decorators';
 import { RolesGuard } from './auth/roles.guard';
 import { SESSION_TTL_MS } from './auth/session-cookie';
 import { ClientsModule } from './clients/clients.module';
+import { DemoModule } from './demo/demo.module';
 import { APP_CONFIG, type AppConfig } from './config/configuration';
 import { HealthController } from './health.controller';
 import { PlansModule } from './plans/plans.module';
@@ -51,6 +52,12 @@ export class AppModule {
             // Only routes marked @AuthRateLimit() count against this stricter limit.
             skipIf: (ctx) => !Reflect.getMetadata(AUTH_RATE_LIMIT, ctx.getHandler()),
           },
+          {
+            name: 'demo',
+            ttl: 60 * 60_000,
+            limit: config.demoRateLimitPerHour,
+            skipIf: (ctx) => !Reflect.getMetadata(DEMO_RATE_LIMIT, ctx.getHandler()),
+          },
         ]),
         UsersModule,
         AuthModule,
@@ -58,6 +65,7 @@ export class AppModule {
         PlansModule,
         TemplatesModule,
         ProgressModule,
+        DemoModule,
       ],
       controllers: [HealthController],
       providers: [

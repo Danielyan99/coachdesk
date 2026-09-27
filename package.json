@@ -13,7 +13,8 @@
     "build": "npm run build:shared && npm run build -w apps/server && npm run build -w apps/web",
     "test": "npm run build:shared && npm test -w apps/server && npm test -w apps/web",
     "format": "prettier --write .",
-    "db:dev": "npm run db:dev -w apps/server"
+    "db:dev": "npm run db:dev -w apps/server",
+    "seed": "npm run build:shared && npm run seed -w apps/server"
   },
   "devDependencies": {
     "concurrently": "^9.1.0",

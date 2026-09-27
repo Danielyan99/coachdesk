@@ -1,42 +1,133 @@
-import { TIERS, TIER_IDS } from '@coachdesk/shared';
+import { type Tier, TIER_IDS, TIERS } from '@coachdesk/shared';
 import { Link } from 'react-router';
-import { Logo } from '../components/Logo';
-import { Button } from '../components/ui';
+import { DemoButtons } from '../components/DemoButtons';
+import { PublicFooter, PublicHeader } from '../components/PublicHeader';
+import { Button, cx, FormError } from '../components/ui';
 import { useMe, useSwitchTier } from '../lib/queries';
 
-// Minimal version; Phase 7 turns this into the full pricing page.
+const INCLUDED = [
+  'Unlimited templates and plans',
+  'Client app with daily checklist',
+  'Invite links for WhatsApp or email',
+  'On-track dashboard',
+];
+
 export function PricingPage() {
   const { data: me } = useMe();
   const switchTier = useSwitchTier();
+  const isTrainer = me?.role === 'trainer';
+
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-10">
-      <Logo />
-      <h1 className="text-3xl font-bold tracking-tight">Pricing</h1>
-      {switchTier.error && <p className="text-sm text-behind">{switchTier.error.message}</p>}
-      <ul className="grid gap-4 sm:grid-cols-3">
-        {TIER_IDS.map((id) => (
-          <li key={id} className="card flex flex-col gap-2 p-5">
-            <p className="font-semibold">{TIERS[id].name}</p>
-            <p className="text-2xl font-bold">${TIERS[id].priceUsd}/mo</p>
-            <p className="text-sm text-ink-muted">
-              {Number.isFinite(TIERS[id].maxClients) ? `Up to ${TIERS[id].maxClients} clients` : 'Unlimited clients'}
-            </p>
-            {me?.role === 'trainer' &&
-              (me.tier === id ? (
-                <p className="text-sm font-medium text-accent">Your plan</p>
-              ) : (
-                <Button size="sm" variant="secondary" onClick={() => switchTier.mutate(id)}>
-                  Switch (demo, no payment)
-                </Button>
-              ))}
+    <div className="flex min-h-dvh flex-col">
+      <PublicHeader />
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-8 pb-16 sm:px-6">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl font-bold tracking-tight">Simple, flat pricing</h1>
+          <p className="mt-3 text-lg text-ink-muted">
+            Pay for the size of your business, not per client. Every plan has every feature.
+          </p>
+        </div>
+
+        <p className="mt-6 rounded-xl border border-accent/20 bg-accent-soft px-4 py-3 text-sm text-ink">
+          This is a portfolio project: switching plans is instant and nothing is charged.
+        </p>
+        <FormError message={switchTier.error?.message} />
+
+        <ul className="mt-8 grid gap-4 md:grid-cols-3">
+          {TIER_IDS.map((id) => (
+            <TierCard
+              key={id}
+              id={id}
+              current={isTrainer && me.tier === id}
+              canSwitch={isTrainer}
+              switching={switchTier.isPending && switchTier.variables === id}
+              onSwitch={() => switchTier.mutate(id)}
+            />
+          ))}
+        </ul>
+
+        <div className="mt-12">
+          {isTrainer ? (
+            <Link to="/app" className="font-medium text-accent hover:underline">
+              ← Back to your clients
+            </Link>
+          ) : (
+            <div className="card p-6 sm:p-8">
+              <h2 className="text-xl font-semibold">Try it first</h2>
+              <p className="mt-1 text-ink-muted">A full demo account with sample clients, ready in a few seconds.</p>
+              <DemoButtons className="mt-5" />
+            </div>
+          )}
+        </div>
+      </main>
+      <PublicFooter />
+    </div>
+  );
+}
+
+function TierCard({
+  id,
+  current,
+  canSwitch,
+  switching,
+  onSwitch,
+}: {
+  id: Tier;
+  current: boolean;
+  canSwitch: boolean;
+  switching: boolean;
+  onSwitch: () => void;
+}) {
+  const tier = TIERS[id];
+  const popular = id === 'pro';
+  return (
+    <li className={cx('card relative flex flex-col p-6', popular && 'border-accent ring-1 ring-accent')}>
+      {popular && (
+        <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
+          Most popular
+        </span>
+      )}
+      <h2 className="text-lg font-semibold">{tier.name}</h2>
+      <p className="mt-3">
+        <span className="text-4xl font-bold tracking-tight">${tier.priceUsd}</span>
+        <span className="text-ink-muted"> / month</span>
+      </p>
+      <p className="mt-1 font-medium">
+        {Number.isFinite(tier.maxClients) ? `Up to ${tier.maxClients} clients` : 'Unlimited clients'}
+      </p>
+      <ul className="mt-5 flex flex-1 flex-col gap-2 text-sm text-ink-muted">
+        {INCLUDED.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span aria-hidden className="text-on-track">
+              ✓
+            </span>
+            {item}
           </li>
         ))}
       </ul>
-      {me?.role === 'trainer' && (
-        <Link to="/app" className="text-sm font-medium text-accent">
-          ← Back to clients
-        </Link>
-      )}
-    </main>
+      <div className="mt-6">
+        {current ? (
+          <p className="flex min-h-11 items-center justify-center rounded-xl bg-accent-soft text-sm font-semibold text-accent">
+            Your current plan
+          </p>
+        ) : canSwitch ? (
+          <Button variant={popular ? 'primary' : 'secondary'} className="w-full" loading={switching} onClick={onSwitch}>
+            Switch to {tier.name}
+          </Button>
+        ) : (
+          <Link
+            to="/signup"
+            className={cx(
+              'flex min-h-11 items-center justify-center rounded-xl text-sm font-medium',
+              popular
+                ? 'bg-accent text-white hover:bg-accent-strong'
+                : 'border border-line bg-card hover:border-ink-faint',
+            )}
+          >
+            Create an account
+          </Link>
+        )}
+      </div>
+    </li>
   );
 }

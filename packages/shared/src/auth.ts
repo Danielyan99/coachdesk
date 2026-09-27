@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Role } from './roles';
+import { type Role, roleSchema } from './roles';
 import type { Tier } from './tiers';
 
 export const emailSchema = z
@@ -47,3 +47,7 @@ export interface ValidationErrorBody {
   message: string;
   fieldErrors: Record<string, string[]>;
 }
+
+/** POST /auth/demo: which side of the demo to open. */
+export const demoSchema = z.object({ role: roleSchema });
+export type DemoInput = z.infer<typeof demoSchema>;

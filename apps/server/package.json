@@ -8,7 +8,8 @@
     "start:dev": "nest start --watch",
     "test": "jest",
     "test:watch": "jest --watch",
-    "db:dev": "node scripts/dev-db.mjs"
+    "db:dev": "node scripts/dev-db.mjs",
+    "seed": "nest build && node dist/demo/seed.js"
   },
   "dependencies": {
     "@coachdesk/shared": "1.0.0",

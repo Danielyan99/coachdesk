@@ -28,7 +28,10 @@ export function SignupPage() {
   );
 
   return (
-    <AuthLayout title="Create your trainer account" subtitle="Free Starter plan with up to 10 clients.">
+    <AuthLayout
+      title="Create your trainer account"
+      subtitle="You start on the Starter plan (up to 10 clients). No payment: this is a portfolio project."
+    >
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         <FormError message={signup.error && !Object.keys(errors).length ? signup.error.message : null} />
         <Field label="Your name" error={errors.name?.message}>

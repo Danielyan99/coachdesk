@@ -82,6 +82,15 @@ export function useAcceptInvite(token: string) {
   });
 }
 
+/** Creates a private demo sandbox on the server and logs in as its trainer or client. */
+export function useStartDemo() {
+  const setSession = useSetSession();
+  return useMutation({
+    mutationFn: (role: 'trainer' | 'client') => api<AuthUser>('/auth/demo', { method: 'POST', body: { role } }),
+    onSuccess: setSession,
+  });
+}
+
 export function useLogout() {
   const setSession = useSetSession();
   return useMutation({

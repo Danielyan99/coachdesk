@@ -12,6 +12,8 @@ export interface AppConfig {
   rateLimitPerMinute: number;
   /** Requests per minute per IP for login, signup and other auth routes. */
   authRateLimitPerMinute: number;
+  /** Demo sandboxes per hour per IP. */
+  demoRateLimitPerHour: number;
 }
 
 function int(value: string | undefined, fallback: number, min: number): number {
@@ -44,6 +46,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     trustProxyHops: int(env.TRUST_PROXY_HOPS, 1, 0),
     rateLimitPerMinute: int(env.RATE_LIMIT_PER_MINUTE, 120, 1),
     authRateLimitPerMinute: int(env.AUTH_RATE_LIMIT_PER_MINUTE, 10, 1),
+    demoRateLimitPerHour: int(env.DEMO_RATE_LIMIT_PER_HOUR, 20, 1),
   };
 }
 

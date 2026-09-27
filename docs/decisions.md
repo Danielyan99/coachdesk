@@ -157,3 +157,22 @@ store: the server is the source of truth. Simple forms (login, client profile) u
 so it keeps plain React state and runs the shared `weekSchema` on save; errors (from the browser or from a server 400)
 are keyed by the same dotted paths, so both appear under the right field and the day tab gets a red dot.
 Local development needs no Docker: `npm run db:dev` starts a real `mongod` binary on port 27017.
+
+## 21. The demo: a private sandbox per visitor, deleted by MongoDB itself
+
+"Try as trainer" / "Try as client" call `POST /api/auth/demo`, which builds a fresh copy of the demo data (1 trainer,
+8 clients, 3 templates, plans, about 2.5 weeks of check-ins) and logs the visitor in with a 24-hour cookie.
+Every document gets `expiresAt = now + 24h`, and every collection has a **TTL index** on it, so MongoDB deletes the
+sandbox by itself. There is no nightly reset job, and visitors never see each other's edits (a shared demo account
+would show whatever the last visitor did). Anything a visitor creates inside the sandbox inherits the same expiry.
+It is built with a few bulk `insertMany` calls (about 0.1 s locally). Creating sandboxes is rate-limited per IP
+(20 per hour, plus the 10/min auth limit), so nobody can fill the free 512 MB database.
+
+## 22. Demo data that always tells the same story
+
+A recruiter should see the same picture any day: two clients on track, two at risk, two behind, one just started,
+one without a plan. Which items were "done" is decided with a golden-ratio sequence instead of random numbers, so the
+misses are spread evenly and every 7-day window stays close to the client's target ratio. A unit test checks each
+client's status at 28 moments across a week (every weekday, four times of day). The same builder feeds
+`npm run seed` (a permanent copy with typed logins, for local development only; it refuses to run against a
+non-local database).
