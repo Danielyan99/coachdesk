@@ -58,3 +58,34 @@ all users share one IP and hit the limit together.
 API tests start the real Nest app with `mongodb-memory-server` and call it with `supertest`, so guards, pipes,
 cookies and indexes are all tested together. One MongoDB starts per test run (Jest global setup) and each test file
 gets its own empty database. No mocks of Mongoose, which would test the mock instead of the queries.
+
+## 9. 404, not 403, for another trainer's data
+
+Every client query filters on `trainerId` from the logged-in user (`findOne({ _id, trainerId })`), never on a
+`trainerId` from the request body. If trainer B asks for trainer A's client, the answer is **404 Not Found**, the
+same as for an id that doesn't exist. A 403 would confirm "this id exists, it's just not yours". A malformed id
+is also a 404 (`ParseObjectIdPipe`). Tests check GET, PATCH, DELETE and invite from a second trainer.
+
+## 10. Invite links
+
+The trainer clicks "Invite" and gets a link with a random 256-bit token to send on WhatsApp (no email service).
+Only the **SHA-256 hash** of the token is stored, so a database leak doesn't leak working links. (A slow hash like
+argon2 is only needed for low-entropy secrets like passwords; a 256-bit random token can't be guessed.)
+The link is valid for 7 days and works **once**: accepting claims it with a conditional update
+(`userId` must still be empty), so two tabs opening the same link can't create two logins. A new invite replaces
+the old link. The client picks their own email on the invite page, so they can log in again later.
+If that email is taken, the link stays valid and they can try another one.
+
+## 11. Archive instead of delete
+
+`DELETE /clients/:id` sets `archived: true`. The client leaves the list and stops counting toward the tier limit,
+but their plan and check-in history stay. A real product would regret a hard delete the first time a trainer
+clicks the wrong button.
+
+## 12. Tier limits, lightly enforced
+
+Creating a client counts the active clients and returns a 403 with `code: CLIENT_LIMIT` when the tier is full, so
+the web app can show "Switch plan" instead of a generic error. Two requests at the exact same moment could both
+pass; a strict check would need a transaction or a counter document, which is too much for a demo of pricing.
+Switching plans is instant and free. Switching down is refused while the trainer has more active clients than the
+smaller plan allows.

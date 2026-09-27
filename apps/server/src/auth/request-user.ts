@@ -9,6 +9,8 @@ export interface RequestUser extends AuthUser {
   trainerObjectId?: Types.ObjectId;
   /** Clients only. */
   clientObjectId?: Types.ObjectId;
+  /** Demo accounts only: data this user creates expires at the same time. */
+  expiresAt?: Date;
 }
 
 export function toRequestUser(user: User & { _id: Types.ObjectId }): RequestUser {
@@ -22,6 +24,7 @@ export function toRequestUser(user: User & { _id: Types.ObjectId }): RequestUser
     ...(user.clientId ? { clientId: user.clientId.toString(), clientObjectId: user.clientId } : {}),
     ...(user.trainerId ? { trainerObjectId: user.trainerId } : {}),
     demo: Boolean(user.expiresAt),
+    ...(user.expiresAt ? { expiresAt: user.expiresAt } : {}),
   };
 }
 

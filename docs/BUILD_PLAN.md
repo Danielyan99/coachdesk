@@ -53,7 +53,7 @@ Use the same monorepo pattern as `portfolio/live-sports-scoreboard` and `portfol
 ## API (all under `/api`)
 
 - `GET /health`
-- Auth: `POST /auth/signup` (trainer), `POST /auth/login`, `POST /auth/logout`, `GET /auth/me`, `POST /auth/demo` {role}, `POST /auth/invite/:token/accept` {password}
+- Auth: `POST /auth/signup` (trainer), `POST /auth/login`, `POST /auth/logout`, `GET /auth/me`, `POST /auth/demo` {role}, `GET /auth/invite/:token` (who invited you), `POST /auth/invite/:token/accept` {email, password} (the client picks the email they log in with)
 - Trainer: `GET/POST /clients`, `GET/PATCH/DELETE /clients/:id` (archive), `POST /clients/:id/invite`, `GET /clients/:id/adherence`
 - Trainer: `GET/POST /templates`, `GET/PATCH/DELETE /templates/:id`, `POST /templates/:id/assign` {clientId, startDate}
 - Trainer: `GET/PUT /clients/:id/plan` (edit the client's own copy)

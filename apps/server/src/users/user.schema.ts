@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ROLES, type Role, type Tier, TIERS } from '@coachdesk/shared';
+import { ROLES, type Role, type Tier, TIER_IDS } from '@coachdesk/shared';
 import { type HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
@@ -25,7 +25,7 @@ export class User {
   clientId?: Types.ObjectId;
 
   /** Trainers only. */
-  @Prop({ enum: Object.keys(TIERS) })
+  @Prop({ enum: TIER_IDS })
   tier?: Tier;
 
   /** Demo sandbox accounts only. MongoDB deletes the document at this time (TTL index below). */

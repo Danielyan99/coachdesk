@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { AUTH_RATE_LIMIT } from './auth/decorators';
 import { RolesGuard } from './auth/roles.guard';
 import { SESSION_TTL_MS } from './auth/session-cookie';
+import { ClientsModule } from './clients/clients.module';
 import { APP_CONFIG, type AppConfig } from './config/configuration';
 import { HealthController } from './health.controller';
 import { UsersModule } from './users/users.module';
@@ -50,6 +51,7 @@ export class AppModule {
         ]),
         UsersModule,
         AuthModule,
+        ClientsModule,
       ],
       controllers: [HealthController],
       providers: [
