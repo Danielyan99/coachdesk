@@ -1,0 +1,22 @@
+# Render Blueprint for the API (free plan). The web app is deployed separately on Vercel (apps/web/vercel.json),
+# which proxies /api/* here so the auth cookie stays first-party.
+services:
+  - type: web
+    name: coachdesk-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build:shared && npm run build -w apps/server
+    startCommand: npm run start -w apps/server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      # MongoDB Atlas M0 (free) connection string
+      - key: MONGO_URI
+        sync: false
+      # Long random string used to sign login tokens
+      - key: JWT_SECRET
+        generateValue: true
+      # The Vercel URL of the web app, e.g. https://coachdesk.vercel.app (used for invite links)
+      - key: WEB_ORIGIN
+        sync: false

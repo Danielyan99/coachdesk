@@ -1,0 +1,22 @@
+{
+  "name": "@coachdesk/shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Types and zod schemas shared by the server (validation pipe) and the web app (forms)",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && node -e \"require('fs').writeFileSync('dist/cjs/package.json', JSON.stringify({type:'commonjs'}))\""
+  },
+  "dependencies": {
+    "zod": "^4.0.0"
+  }
+}

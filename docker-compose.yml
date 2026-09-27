@@ -1,0 +1,10 @@
+# Optional: local MongoDB for development (npm run dev expects MONGO_URI in apps/server/.env).
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:
