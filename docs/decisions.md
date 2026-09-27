@@ -148,3 +148,12 @@ for that weekday.
 instead of one query per client (the "N+1" problem). With 30 clients that is 4 queries, not 90.
 Clients can be in different time zones, so it fetches one extra day of check-ins and lets `computeAdherence` pick
 each client's own 7-day window.
+
+## 20. Web app: server state in TanStack Query, one schema for forms
+
+All API data lives in TanStack Query (cache, loading and error states, refetch after a change). There is no global
+store: the server is the source of truth. Simple forms (login, client profile) use react-hook-form with
+`zodResolver(schema)` using the **same schema** the server validates with. The week editor is one big nested object,
+so it keeps plain React state and runs the shared `weekSchema` on save; errors (from the browser or from a server 400)
+are keyed by the same dotted paths, so both appear under the right field and the day tab gets a red dot.
+Local development needs no Docker: `npm run db:dev` starts a real `mongod` binary on port 27017.

@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "db",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "db:dev", "-w", "apps/server"],
+      "port": 27017
+    },
+    {
       "name": "server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:dev", "-w", "apps/server"],

@@ -8,3 +8,4 @@ coverage/
 .vercel
 .claude/*
 !.claude/launch.json
+apps/server/.dev-db/
