@@ -12,6 +12,7 @@ import { ClientsModule } from './clients/clients.module';
 import { DemoModule } from './demo/demo.module';
 import { APP_CONFIG, type AppConfig } from './config/configuration';
 import { HealthController } from './health.controller';
+import { IpCheckController } from './ip-check.controller';
 import { PlansModule } from './plans/plans.module';
 import { ProgressModule } from './progress/progress.module';
 import { TemplatesModule } from './templates/templates.module';
@@ -67,7 +68,7 @@ export class AppModule {
         ProgressModule,
         DemoModule,
       ],
-      controllers: [HealthController],
+      controllers: [HealthController, IpCheckController],
       providers: [
         // Order matters: rate limit first, then "who are you", then "may you do this".
         { provide: APP_GUARD, useClass: ThrottlerGuard },
