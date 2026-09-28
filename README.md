@@ -3,7 +3,7 @@
 **Client management for personal trainers.** Build weekly workout and meal plans, share them with clients through a
 one-time invite link, and see on one dashboard who is on track, who is at risk and who is falling behind.
 
-> **Live demo:** _link added after deploy_
+> **Live demo:** https://coachdesk-lyart.vercel.app · **API health:** https://coachdesk-lyart.vercel.app/api/health
 >
 > Click **Try as a trainer** or **Try as a client**: you get your own private copy of the demo data (8 clients,
 > 3 templates, two weeks of history), deleted automatically after 24 hours. The API runs on Render's free tier and
