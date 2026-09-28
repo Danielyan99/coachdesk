@@ -4,7 +4,7 @@
   "buildCommand": "cd ../.. && npm run build:shared && npm run build -w apps/web",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://coachdesk-api.onrender.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://coachdesk-api-x7w3.onrender.com/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
