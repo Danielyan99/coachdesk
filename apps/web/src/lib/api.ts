@@ -37,12 +37,12 @@ export async function api<T>(path: string, options: { method?: Method; body?: un
   if (res.status === 204) return undefined as T;
   const data = await res.json().catch(() => undefined);
   if (!res.ok) {
+    const serverMessage = typeof data?.message === 'string' ? data.message : null;
+    // The rate limiter's own text ("ThrottlerException: ...") is not for people; our own 429 messages are.
     const message =
-      res.status === 429
+      res.status === 429 && (!serverMessage || serverMessage.startsWith('ThrottlerException'))
         ? 'Too many tries in a short time. Please wait a minute and try again.'
-        : typeof data?.message === 'string'
-          ? data.message
-          : 'Something went wrong. Please try again.';
+        : (serverMessage ?? 'Something went wrong. Please try again.');
     throw new ApiError(res.status, message, data?.fieldErrors ?? {}, data?.code);
   }
   return data as T;

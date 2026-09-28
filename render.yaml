@@ -17,6 +17,9 @@ services:
       # Long random string used to sign login tokens
       - key: JWT_SECRET
         generateValue: true
+      # Browser, Vercel, Cloudflare and Render's own proxies sit in front of the API: the visitor's IP is 4 hops back.
+      - key: TRUST_PROXY_HOPS
+        value: '4'
       # The Vercel URL of the web app (used for invite links; https also turns on secure cookies)
       - key: WEB_ORIGIN
         value: https://coachdesk-lyart.vercel.app

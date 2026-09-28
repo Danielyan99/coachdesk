@@ -46,6 +46,15 @@ export class DemoService {
     @InjectModel(CheckIn.name) private readonly checkIns: Model<CheckIn>,
   ) {}
 
+  /** Demo sandboxes started in the last hour (one demo trainer each). */
+  sandboxesInLastHour(): Promise<number> {
+    return this.users.countDocuments({
+      role: 'trainer',
+      expiresAt: { $exists: true },
+      createdAt: { $gte: new Date(Date.now() - 60 * 60 * 1000) },
+    });
+  }
+
   async createSandbox(options: SandboxOptions = {}): Promise<Sandbox> {
     const now = new Date();
     const tag = randomBytes(6).toString('hex');

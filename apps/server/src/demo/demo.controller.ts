@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Inject, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Inject, Post, Res } from '@nestjs/common';
 import { type AuthUser, type DemoInput, demoSchema } from '@coachdesk/shared';
 import type { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
@@ -30,6 +30,13 @@ export class DemoController {
     @Body(new ZodValidationPipe(demoSchema)) { role }: DemoInput,
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthUser> {
+    // A per-IP limit can be dodged with many IPs; this total cap keeps the free database from filling up.
+    if ((await this.demo.sandboxesInLastHour()) >= this.config.demoGlobalLimitPerHour) {
+      throw new HttpException(
+        'The demo is very busy right now. Please try again in a few minutes.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
     const sandbox = await this.demo.createSandbox({ expiresAt: new Date(Date.now() + DEMO_TTL_MS) });
     const user = role === 'trainer' ? sandbox.trainer : sandbox.client;
     setSessionCookie(res, await this.auth.signToken(user), this.config.secureCookies, DEMO_TTL_MS);

@@ -90,3 +90,20 @@ describe('Demo rate limit (e2e)', () => {
     await t.agent().post('/api/auth/login').send({ email: 'x@example.com', password: 'whatever' }).expect(401);
   });
 });
+
+describe('Demo global limit (e2e)', () => {
+  let t: TestApp;
+
+  beforeAll(async () => {
+    t = await createTestApp({ demoGlobalLimitPerHour: 2 });
+  });
+
+  afterAll(() => t.close());
+
+  it('stops new sandboxes when too many were made in the last hour, from any IP', async () => {
+    await t.agent().post('/api/auth/demo').send({ role: 'trainer' }).expect(200);
+    await t.agent().post('/api/auth/demo').send({ role: 'client' }).expect(200);
+    const res = await t.agent().post('/api/auth/demo').send({ role: 'trainer' }).expect(429);
+    expect(res.body.message).toMatch(/very busy/);
+  });
+});

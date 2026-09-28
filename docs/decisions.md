@@ -50,8 +50,10 @@ form can show each message under the right field.
 Two `@nestjs/throttler` limits per IP: a loose one for every route (120/min) and a strict one (10/min) only for routes
 marked `@AuthRateLimit()` (login, signup, later demo and invite). This slows down password guessing and demo spam.
 Behind proxies the server must trust the `X-Forwarded-For` header to see the real IP (`TRUST_PROXY_HOPS`, default 1).
-**To check at deploy:** with the Vercel rewrite in front of Render there may be 2 hops; if the value is too low,
-all users share one IP and hit the limit together.
+**Checked at deploy:** with the default of 1, the server saw an internal Render address, so every visitor shared one
+limit. A request through Vercel passes 4 proxies (Vercel, Cloudflare, two Render hops), so production uses
+`TRUST_PROXY_HOPS=4`. Vercel overwrites `X-Forwarded-For`, so visitors can't fake their IP through the website; someone
+calling Render directly could, which is why demo creation also has a **global** cap (300 per hour, any IP).
 
 ## 8. Tests on a real (in-memory) MongoDB
 
